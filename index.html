@@ -19,15 +19,18 @@
 		<script>
 			function callQuery1() {
 				var bn  = new BN();
-			    document.getElementById("queries").innerHTML = bn.query1(5000);
+			    document.getElementById("queries").innerHTML =
+						bn.query1(document.getElementById("quantidade").value);
 			}
 			function callQuery2() {
 				var bn  = new BN();
-			    document.getElementById("queries").innerHTML = bn.query2(5000);
+			    document.getElementById("queries").innerHTML =
+						bn.query2(document.getElementById("quantidade").value);
 			}
 			function callQuery3() {
 				var bn  = new BN();
-			    document.getElementById("queries").innerHTML = bn.query3(5000);
+			    document.getElementById("queries").innerHTML =
+						bn.query3(document.getElementById("quantidade").value);
 			}
 		</script>
 	</head>
@@ -36,6 +39,10 @@
 		<div class="content">
 			<h1>Projeto IA 2</h1>
 			<p class="tagline">Consultas em Rede Bayesiana | <span style="font-weight: 600;">v1.0</span></p>
+
+			  <p> <input id="quantidade" type="number" name="quantity" min="1" max="100000" value="1000">  
+					Quantidade de exemplos para cálculo aproximado </p>
+
 			<button class ="button" onclick="callQuery1()">P(T)</button>
 			<button class ="button" onclick="callQuery2()">P(X|+a,+s)</button>
 			<button class ="button" onclick="callQuery3()">P(S|+x,+d)</button>

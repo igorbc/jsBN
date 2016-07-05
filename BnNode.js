@@ -26,11 +26,25 @@ BnNode.prototype.getSample = function(exemplo, fixo){
       exemplo.variaveis[this.vars[this.vars.length-1]] = "-" + this.vars[this.vars.length-1];
       return exemplo;
     }
-
   }
 }
 
-BnNode.prototype.montaString = function(sampleQ){
+BnNode.prototype.resultadoExato = function(){
+  var retorno = [];
+  var i = 0;
+  _.each(this.p, function(valor, chave){
+    retorno[i] = [];
+    var variaveis = chave.split(",");
+    variaveis.forEach(function(elemento, indice){
+      retorno[i].push(elemento);
+    })
+    retorno[i].push(valor.toFixed(4));
+    i++;
+  }, this);
+  return retorno;
+}
+
+BnNode.prototype.montaString = function(){
   this.str = "<table>";
   _.each(this.p, function(valor, chave){
     this.str += "<tr>";

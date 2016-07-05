@@ -70,4 +70,9 @@ h1 {
     border: 2px solid #e7e7e7;
 }
 
-.button4:hover {background-color: #dddddd;}
+.button:hover {background-color: #dddddd;}
+
+input {
+  font-size: 16px;
+  width: 100px;
+}

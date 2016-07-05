@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>js BN</title>
+		<meta charset="UTF-8">
+		<!--
+		<link rel="icon" href="imgs/favicon-questionblock.ico" />
+		<link rel="stylesheet" href="yurator.css">
+		<link href='http://fonts.googleapis.com/css?family=Titillium+Web:200,400italic,600' rel='stylesheet' type='text/css'>
+		-->
+		<script type="text/javascript" src="underscore.js"></script>
+		<script type="text/javascript" src="BN.js"></script>
+		<script type="text/javascript" src="BnNode.js"></script>
+		<script type="text/javascript" src="BnSample.js"></script>
+
+		<script>
+			function callQuery1() {
+				var bn  = new BN();
+			    document.getElementById("queries").innerHTML = bn.query1();
+			}
+			function callQuery2() {
+				var bn  = new BN();
+			    document.getElementById("queries").innerHTML = bn.query2();
+			}
+			function callQuery3() {
+				var bn  = new BN();
+			    document.getElementById("queries").innerHTML = bn.query3();
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="content">
+			<h1>Projeto IA 2</h1>
+			<p class="tagline">Consultas em Rede Bayesiana | <span style="font-weight: 600;">v1.0</span></p>
+			<div class="stage">
+				<button onclick="callQuery1()">P(T)</button>
+				<button onclick="callQuery2()">P(X|+a,+s)</button>
+				<button onclick="callQuery3()">P(S|+x,+d)</button>
+				<p id="queries"></p>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -27,12 +27,26 @@ function BN() {
               "-e,+b,+d": 0.8, "-e,+b,-d": 0.2, "-e,-b,+d": 0.1, "-e,-b,-d": 0.9};
   this.X.vars = ["e", "x"];
   this.X.p = {"+e,+x": 0.98 ,"+e,-x": 0.02 ,"-e,+x": 0.05 ,"-e,-x": 0.95};
+
+  this.precisao = 4;
 }
 
 BN.prototype.query3 = function(quantidade){
   var resultadoExato = this.query3exata();
-  var resultadoAproximado = this.query3sample(quantidade);
-  return this.montaTabela(resultadoExato, resultadoAproximado);
+  var diferenca;
+  var somaDiferenca = 0;
+  var somaDiferenca2 = 0;
+
+  for(var i = 0; i < 100; i++){
+    var resultadoAproximado = this.query3sample(quantidade);
+    diferenca = Math.abs(resultadoAproximado[0] -
+          resultadoExato[0][resultadoExato[0].length - 1]);
+    somaDiferenca+= diferenca;
+    somaDiferenca2+= diferenca*diferenca;
+  }
+
+  return this.montaTabela(resultadoExato, resultadoAproximado,
+      (somaDiferenca).toFixed(this.precisao), (somaDiferenca2).toFixed(this.precisao));
 }
 
 BN.prototype.query3sample = function(quantidade){
@@ -60,8 +74,8 @@ BN.prototype.query3sample = function(quantidade){
       negativo = negativo + exemplo.peso;
     }
   }
-  var retorno = [(positivo/(negativo + positivo)).toFixed(4),
-                 (negativo/(negativo + positivo)).toFixed(4)];
+  var retorno = [(positivo/(negativo + positivo)).toFixed(this.precisao),
+                 (negativo/(negativo + positivo)).toFixed(this.precisao)];
   return retorno;
 }
 
@@ -124,13 +138,25 @@ BN.prototype.query3exata = function(){
 
   // agora faltaria multiplicar por P(+x) e P(+d) e normalizar. O resultado é
   // proporcional, portanto basta normalizar e mostrar o resultado.
-  return f5.resultadoExato();
+  return f5.resultadoExato(this.precisao);
 }
 
 BN.prototype.query2 = function(quantidade){
   var resultadoExato = this.query2exata();
-  var resultadoAproximado = this.query2sample(quantidade);
-  return this.montaTabela(resultadoExato, resultadoAproximado);
+  var diferenca;
+  var somaDiferenca = 0;
+  var somaDiferenca2 = 0;
+
+  for(var i = 0; i < 100; i++){
+    var resultadoAproximado = this.query2sample(quantidade);
+    diferenca = Math.abs(resultadoAproximado[0] -
+          resultadoExato[0][resultadoExato[0].length - 1]);
+    somaDiferenca+= diferenca;
+    somaDiferenca2+= diferenca*diferenca;
+  }
+
+  return this.montaTabela(resultadoExato, resultadoAproximado,
+      (somaDiferenca).toFixed(this.precisao), (somaDiferenca2).toFixed(this.precisao));
 }
 
 BN.prototype.query2sample = function(quantidade){
@@ -155,8 +181,8 @@ BN.prototype.query2sample = function(quantidade){
       negativo = negativo + exemplo.peso;
     }
   }
-  var retorno = [(positivo/(negativo + positivo)).toFixed(4),
-                 (negativo/(negativo + positivo)).toFixed(4)];
+  var retorno = [(positivo/(negativo + positivo)).toFixed(this.precisao),
+                 (negativo/(negativo + positivo)).toFixed(this.precisao)];
   return retorno;
 }
 
@@ -201,13 +227,26 @@ BN.prototype.query2exata = function(){
 
   // agora faltaria multiplicar por P(+a) e P(+s) e normalizar. O resultado é
   // proporcional, portanto basta normalizar e mostrar o resultado.
-  return f3.resultadoExato();
+  return f3.resultadoExato(this.precisao);
 }
 
 BN.prototype.query1 = function(quantidade){
   var resultadoExato = this.query1exata();
-  var resultadoAproximado = this.query1sample(quantidade);
-  return this.montaTabela(resultadoExato, resultadoAproximado);
+
+  var diferenca;
+  var somaDiferenca = 0;
+  var somaDiferenca2 = 0;
+
+  for(var i = 0; i < 100; i++){
+    var resultadoAproximado = this.query1sample(quantidade);
+    diferenca = Math.abs(resultadoAproximado[0] -
+          resultadoExato[0][resultadoExato[0].length - 1]);
+    somaDiferenca+= diferenca;
+    somaDiferenca2+= diferenca*diferenca;
+  }
+
+  return this.montaTabela(resultadoExato, resultadoAproximado,
+      (somaDiferenca).toFixed(this.precisao), (somaDiferenca2).toFixed(this.precisao));
 }
 
 BN.prototype.query1sample = function(quantidade){
@@ -223,8 +262,8 @@ BN.prototype.query1sample = function(quantidade){
     else
       negativo++;
   }
-  var retorno = [(positivo/(negativo + positivo)).toFixed(4),
-                 (negativo/(negativo + positivo)).toFixed(4)];
+  var retorno = [(positivo/(negativo + positivo)).toFixed(this.precisao),
+                 (negativo/(negativo + positivo)).toFixed(this.precisao)];
   return retorno;
 }
 
@@ -238,10 +277,11 @@ BN.prototype.query1exata = function(){
   probTA.somaEmUltimaVariavel("a", probT);
   probT.normaliza();
 
-  return probT.resultadoExato();
+  return probT.resultadoExato(this.precisao);
 }
 
-BN.prototype.montaTabela = function(resultadoExato, resultadoAproximado){
+BN.prototype.montaTabela = function(resultadoExato, resultadoAproximado,
+    difMedia, dif2Media){
   var tabelaHtml = "";
   tabelaHtml = "<table>"
 
@@ -263,10 +303,13 @@ BN.prototype.montaTabela = function(resultadoExato, resultadoAproximado){
 
     tabelaHtml += "<td>" + resultadoAproximado[i] + "</td>" +
                   "<td>" + Math.abs(resultadoAproximado[i] -
-                           resultadoExato[i][j-1]).toFixed(4) + "</td>";
-
+                           resultadoExato[i][j-1]).toFixed(this.precisao) + "</td>";
     tabelaHtml += "</tr>"
   }
   tabelaHtml += "</table>"
+
+  tabelaHtml += "<p>Erro médio (%): " + difMedia + "</p>"
+  //tabelaHtml += "<p>Erro<sup>2</sup> médio (%): " + dif2Media + "</p>"
+
   return tabelaHtml;
 }

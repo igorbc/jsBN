@@ -29,7 +29,7 @@ BnNode.prototype.getSample = function(exemplo, fixo){
   }
 }
 
-BnNode.prototype.resultadoExato = function(){
+BnNode.prototype.resultadoExato = function(precisao){
   var retorno = [];
   var i = 0;
   _.each(this.p, function(valor, chave){
@@ -38,7 +38,7 @@ BnNode.prototype.resultadoExato = function(){
     variaveis.forEach(function(elemento, indice){
       retorno[i].push(elemento);
     })
-    retorno[i].push(valor.toFixed(4));
+    retorno[i].push(valor.toFixed(precisao));
     i++;
   }, this);
   return retorno;
@@ -48,7 +48,7 @@ BnNode.prototype.montaString = function(){
   this.str = "<table>";
   _.each(this.p, function(valor, chave){
     this.str += "<tr>";
-    this.str += "<td>" + chave.replaceAll(",","</td><td>") + "</td><td>" + valor.toFixed(4) + "</td>";
+    this.str += "<td>" + chave.replaceAll(",","</td><td>") + "</td><td>" + valor.toFixed(6) + "</td>";
 
     this.str += "</tr>";
   }, this);

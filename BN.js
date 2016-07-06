@@ -33,20 +33,17 @@ function BN() {
 
 BN.prototype.query3 = function(quantidade){
   var resultadoExato = this.query3exata();
-  var diferenca;
-  var somaDiferenca = 0;
-  var somaDiferenca2 = 0;
+  var diferenca = [];
 
   for(var i = 0; i < 100; i++){
     var resultadoAproximado = this.query3sample(quantidade);
-    diferenca = Math.abs(resultadoAproximado[0] -
+    diferenca[i] = Math.abs(resultadoAproximado[0] -
           resultadoExato[0][resultadoExato[0].length - 1]);
-    somaDiferenca+= diferenca;
-    somaDiferenca2+= diferenca*diferenca;
   }
-
+  var media = (math.mean(diferenca) * 100).toFixed(this.precisao);
+  var desvioPadrao = (math.std(diferenca) * 100).toFixed(this.precisao);
   return this.montaTabela(resultadoExato, resultadoAproximado,
-      (somaDiferenca).toFixed(this.precisao), (somaDiferenca2).toFixed(this.precisao));
+      media, desvioPadrao);
 }
 
 BN.prototype.query3sample = function(quantidade){
@@ -143,20 +140,18 @@ BN.prototype.query3exata = function(){
 
 BN.prototype.query2 = function(quantidade){
   var resultadoExato = this.query2exata();
-  var diferenca;
-  var somaDiferenca = 0;
-  var somaDiferenca2 = 0;
+  var diferenca = [];
 
   for(var i = 0; i < 100; i++){
     var resultadoAproximado = this.query2sample(quantidade);
-    diferenca = Math.abs(resultadoAproximado[0] -
+    diferenca[i] = Math.abs(resultadoAproximado[0] -
           resultadoExato[0][resultadoExato[0].length - 1]);
-    somaDiferenca+= diferenca;
-    somaDiferenca2+= diferenca*diferenca;
   }
 
+  var media = (math.mean(diferenca) * 100).toFixed(this.precisao);
+  var desvioPadrao = (math.std(diferenca) * 100).toFixed(this.precisao);
   return this.montaTabela(resultadoExato, resultadoAproximado,
-      (somaDiferenca).toFixed(this.precisao), (somaDiferenca2).toFixed(this.precisao));
+      media, desvioPadrao);
 }
 
 BN.prototype.query2sample = function(quantidade){
@@ -232,21 +227,18 @@ BN.prototype.query2exata = function(){
 
 BN.prototype.query1 = function(quantidade){
   var resultadoExato = this.query1exata();
-
-  var diferenca;
-  var somaDiferenca = 0;
-  var somaDiferenca2 = 0;
+  var diferenca = [];
 
   for(var i = 0; i < 100; i++){
     var resultadoAproximado = this.query1sample(quantidade);
-    diferenca = Math.abs(resultadoAproximado[0] -
+    diferenca[i] = Math.abs(resultadoAproximado[0] -
           resultadoExato[0][resultadoExato[0].length - 1]);
-    somaDiferenca+= diferenca;
-    somaDiferenca2+= diferenca*diferenca;
   }
 
+  var media = (math.mean(diferenca) * 100).toFixed(this.precisao);
+  var desvioPadrao = (math.std(diferenca) * 100).toFixed(this.precisao);
   return this.montaTabela(resultadoExato, resultadoAproximado,
-      (somaDiferenca).toFixed(this.precisao), (somaDiferenca2).toFixed(this.precisao));
+      media, desvioPadrao);
 }
 
 BN.prototype.query1sample = function(quantidade){
@@ -281,7 +273,7 @@ BN.prototype.query1exata = function(){
 }
 
 BN.prototype.montaTabela = function(resultadoExato, resultadoAproximado,
-    difMedia, dif2Media){
+    difMedia, desvioPadrao){
   var tabelaHtml = "";
   tabelaHtml = "<table>"
 
@@ -289,9 +281,9 @@ BN.prototype.montaTabela = function(resultadoExato, resultadoAproximado,
   for(var j = 0; j < resultadoExato[0].length - 1; j++){
     tabelaHtml += "<th>" + resultadoExato[0][j].charAt(1).toUpperCase() + "</th>";
   }
-  tabelaHtml += "<th> Exato </th>";
-  tabelaHtml += "<th> Aproximado </th>";
-  tabelaHtml += "<th> Diferença </th>";
+  tabelaHtml += "<th> Exata </th>";
+  tabelaHtml += "<th> Aproximada </th>";
+  tabelaHtml += "<th> Erro </th>";
   tabelaHtml += "</tr>";
 
   for(var i = 0; i < resultadoExato.length; i++){
@@ -309,7 +301,7 @@ BN.prototype.montaTabela = function(resultadoExato, resultadoAproximado,
   tabelaHtml += "</table>"
 
   tabelaHtml += "<p>Erro médio (%): " + difMedia + "</p>"
-  //tabelaHtml += "<p>Erro<sup>2</sup> médio (%): " + dif2Media + "</p>"
+  tabelaHtml += "<p>Desvio padrão (%): " + desvioPadrao + "</p>"
 
   return tabelaHtml;
 }
